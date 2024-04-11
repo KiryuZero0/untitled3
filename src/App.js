@@ -1,4 +1,4 @@
-// App.js
+
 import React, { useState } from 'react';
 import { Layout, Breadcrumb, Tabs } from 'antd';
 import CreareCard from './CreareCard';
