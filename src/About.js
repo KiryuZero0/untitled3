@@ -1,7 +1,7 @@
-
+// About.js
 import React from 'react';
 
-
+// Interfața pentru prima componentă
 interface CompanyInfo {
     nume: string;
     nrTelefon: string;
@@ -10,14 +10,14 @@ interface CompanyInfo {
     dataInfiintare: string;
 }
 
-
+// Interfața pentru a doua componentă, care extinde prima interfață
 interface ExtendedCompanyInfo extends CompanyInfo {
     adresa: string;
     website: string;
 }
 
 const About: React.FC = () => {
-
+    // Obiect conform primei interfețe
     const companyData: CompanyInfo = {
         nume: 'Numele Companiei',
         nrTelefon: '0123456789',
@@ -26,7 +26,7 @@ const About: React.FC = () => {
         dataInfiintare: '01/01/2000',
     };
 
-
+    // Obiect conform celei de-a doua interfețe
     const extendedCompanyData: ExtendedCompanyInfo = {
         ...companyData,
         adresa: 'Str. Exemplu, Nr. 123',

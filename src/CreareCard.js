@@ -1,10 +1,10 @@
-
 import React, { useState } from 'react';
-import { Form, Input, Button, message } from 'antd';
+import { Button, Input, message } from 'antd';
 
-const CreareCard = ({ onCardSave }) => {
+const CerereCard = ({ onSaveCard }) => {
     const [formData, setFormData] = useState({
-        name: '',
+        nume: '',
+        prenume: '',
         cardNumber: '',
         expiryDate: '',
         cvc: '',
@@ -12,19 +12,27 @@ const CreareCard = ({ onCardSave }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        if ((name === 'nume' || name === 'prenume') && /\d/.test(value)) {
+            alert('Numele și prenumele nu pot conține cifre!');
+            return;
+        }
         setFormData({ ...formData, [name]: value });
     };
 
-    const handleSave = () => {
+    const handleGenerate = () => {
         const cardNumber = generateRandomCardNumber();
+        const expiryDate = generateRandomExpiryDate();
         const cvc = generateRandomNumber(3);
-        const newCard = { ...formData, cardNumber, cvc };
-        onCardSave(newCard);
-        setFormData({
-            name: '',
-            expiryDate: '',
-        });
-        message.success('Cardul a fost salvat cu succes!');
+        setFormData({ ...formData, cardNumber, expiryDate, cvc });
+    };
+
+    const handleSaveCard = () => {
+        if (!formData.nume || !formData.prenume || !formData.cardNumber || !formData.expiryDate || !formData.cvc) {
+            message.error('Completați toate câmpurile!');
+            return;
+        }
+
+        onSaveCard(formData);
     };
 
     const generateRandomNumber = (length) => {
@@ -34,6 +42,12 @@ const CreareCard = ({ onCardSave }) => {
             result += characters.charAt(Math.floor(Math.random() * characters.length));
         }
         return result;
+    };
+
+    const generateRandomExpiryDate = () => {
+        const month = String(Math.floor(Math.random() * 12) + 1).padStart(2, '0');
+        const year = String(new Date().getFullYear() + Math.floor(Math.random() * 5));
+        return `${month}/${year}`;
     };
 
     const generateRandomCardNumber = () => {
@@ -48,21 +62,31 @@ const CreareCard = ({ onCardSave }) => {
     };
 
     return (
-        <div>
-            <h1>Creare Card</h1>
-            <Form layout="vertical">
-                <Form.Item label="Numele" name="name" rules={[{ required: true, message: 'Introduceți numele!' }]}>
-                    <Input name="name" value={formData.name} onChange={handleChange} />
-                </Form.Item>
-                <Form.Item label="Data Expirării" name="expiryDate" rules={[{ required: true, message: 'Introduceți data de expirare!' }]}>
-                    <Input name="expiryDate" value={formData.expiryDate} onChange={handleChange} />
-                </Form.Item>
-                <Form.Item>
-                    <Button type="primary" onClick={handleSave}>Salvează Card</Button>
-                </Form.Item>
-            </Form>
+        <div style={{ maxWidth: '400px', margin: '0 auto' }}>
+            <h1 style={{ textAlign: 'center' }}>Cerere Card</h1>
+            <label style={{ display: 'block', marginBottom: '10px' }}>
+                Nume:
+                <Input type="text" name="nume" value={formData.nume} onChange={handleChange} />
+            </label>
+            <label style={{ display: 'block', marginBottom: '10px' }}>
+                Prenume:
+                <Input type="text" name="prenume" value={formData.prenume} onChange={handleChange} />
+            </label>
+            {/* Am eliminat eticheta și intrarea pentru Număr Card */}
+            <label style={{ display: 'block', marginBottom: '10px' }}>
+                Data Expirării:
+                <Input type="text" name="expiryDate" value={formData.expiryDate} readOnly />
+            </label>
+            <label style={{ display: 'block', marginBottom: '10px' }}>
+                CVC:
+                <Input type="number" name="cvc" value={formData.cvc} onChange={handleChange} maxLength={3} />
+            </label>
+            <div style={{ textAlign: 'center' }}>
+                <Button type="primary" onClick={handleGenerate} style={{ marginRight: '10px' }}>Generate</Button>
+                <Button onClick={handleSaveCard}>Save Card</Button>
+            </div>
         </div>
     );
 };
 
-export default CreareCard;
+export default CerereCard;

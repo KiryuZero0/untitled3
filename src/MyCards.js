@@ -1,19 +1,41 @@
-
 import React from 'react';
-import { Card } from 'antd';
+import { Table } from 'antd';
 
-const MyCards = ({ cards }) => {
+const MyCards = ({ myCards }) => {
+    const columns = [
+        {
+            title: 'Nume',
+            dataIndex: 'nume',
+            key: 'nume',
+            render: (text, record) => <span>{record.nume}</span>, // Renderizăm doar numele
+        },
+        {
+            title: 'Prenume',
+            dataIndex: 'prenume',
+            key: 'prenume',
+            render: (text, record) => <span>{record.prenume}</span>, // Renderizăm doar prenumele
+        },
+        {
+            title: 'Număr card',
+            dataIndex: 'cardNumber',
+            key: 'cardNumber',
+        },
+        {
+            title: 'Data expirării',
+            dataIndex: 'expiryDate',
+            key: 'expiryDate',
+        },
+        {
+            title: 'CVC',
+            dataIndex: 'cvc',
+            key: 'cvc',
+        },
+    ];
+
     return (
-        <div>
-            <h1>My Cards</h1>
-            {cards.map((card, index) => (
-                <Card key={index} title={`Card ${index + 1}`}>
-                    <p>Nume: {card.name}</p>
-                    <p>Număr Card: {card.cardNumber}</p>
-                    <p>Data Expirării: {card.expiryDate}</p>
-                    <p>CVC: {card.cvc}</p>
-                </Card>
-            ))}
+        <div style={{ margin: '20px 0' }}>
+            <h2 style={{ textAlign: 'center' }}>My Cards</h2>
+            <Table dataSource={myCards} columns={columns} />
         </div>
     );
 };
