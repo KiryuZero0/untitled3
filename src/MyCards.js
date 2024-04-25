@@ -1,20 +1,23 @@
-//MyCards.js
-import React from 'react';
+import React, { useState } from 'react';
 import { Table } from 'antd';
+import { observer } from 'mobx-react-lite';
+import cardStore from './CardStore';
 
-const MyCards = ({ myCards }) => {
+const MyCards = () => {
+    const [editingIndex, setEditingIndex] = useState(-1);
+    const [editedCard, setEditedCard] = useState({
+        nume: '',
+        prenume: '',
+        cardNumber: '',
+        expiryDate: '',
+        cvc: '',
+    });
+
     const columns = [
         {
-            title: 'Nume',
+            title: 'Nume și prenume',
             dataIndex: 'nume',
             key: 'nume',
-            render: (text, record) => <span>{record.nume}</span>, // Renderizăm doar numele
-        },
-        {
-            title: 'Prenume',
-            dataIndex: 'prenume',
-            key: 'prenume',
-            render: (text, record) => <span>{record.prenume}</span>, // Renderizăm doar prenumele
         },
         {
             title: 'Număr card',
@@ -36,9 +39,9 @@ const MyCards = ({ myCards }) => {
     return (
         <div style={{ margin: '20px 0' }}>
             <h2 style={{ textAlign: 'center' }}>My Cards</h2>
-            <Table dataSource={myCards} columns={columns} />
+            <Table dataSource={cardStore.cardsList} columns={columns} />
         </div>
     );
 };
 
-export default MyCards;
+export default observer(MyCards);
